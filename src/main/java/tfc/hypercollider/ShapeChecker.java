@@ -39,10 +39,10 @@ public class ShapeChecker {
                         bounds.maxY + y,
                         bounds.maxZ + z
                 )) {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         VoxelShape voxelShape2 = shape.move(x, y, z);

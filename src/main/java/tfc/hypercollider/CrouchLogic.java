@@ -14,12 +14,16 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class CrouchLogic {
     public static void handle(Abilities abilities, Entity entity, Vec3 vec3, MoverType moverType, CallbackInfoReturnable<Vec3> cir, boolean stayingOnGroundSurface, boolean aboveGround) {
         if (!abilities.flying && vec3.y <= 0.0 && (moverType == MoverType.SELF || moverType == MoverType.PLAYER) && stayingOnGroundSurface && aboveGround) {
             double x = vec3.x;
             double z = vec3.z;
-            z = 0;
+//            z = 0;
+            x = 0;
 
             int sigX = (int) Math.signum(x);
             int sigZ = (int) Math.signum(z);
@@ -52,71 +56,50 @@ public class CrouchLogic {
             int minY = (int) Math.floor(stepperRegion.minY) - 1;
             int maxY = (int) Math.ceil(stepperRegion.maxY) + 1;
 
-//            System.out.println(x);
-
             if (sigX != 0 && sigZ == 0) {
-                int minZ = (int) Math.floor(stepperBounds.minZ) - 1;
-                int maxZ = (int) Math.ceil(stepperBounds.maxZ) + 1;
+                double pad = 0.05 * sigX;
+                AABB curr = stepperBounds.move(x + pad, 0, 0);
 
-                double boundX = sigX > 0 ?
-                        eBounds.minX :
-                        eBounds.maxX;
-                double oBoundX = -Math.ceil((sigX > 0 ?
-                        eBounds.maxX :
-                        eBounds.minX) - boundX) - sigX;
-
-                double px = x + sigX;
-                double xm = -x;
-                boolean foundEdge = false;
-
-                while (true) {
-                    for (int zi = minZ; zi <= maxZ; zi++) {
-                        for (int yi = minY; yi <= maxY; yi++) {
-                            int xi = (int) (boundX + px);
-                            mutable.set(
-                                    xi, yi, zi
-                            );
-
-                            BlockState state = lvl.getBlockState(mutable);
-                            if (!state.isAir()) {
-                                VoxelShape sp = state.getCollisionShape(
-                                        lvl, mutable, context
-                                );
-
-                                double mv = sp.max(Direction.Axis.X);
-                                if (sigX > 0) {
-                                    double crd = (xi - 1) + mv;
-                                    double oset = 0.05;
-                                    crd -= oset; // ensure overlap
-                                    if (Math.ceil(px) + boundX > crd) {
-                                        double dv = crd - (boundX - (1.0 - oset));
-                                        if (dv > xm) {
-                                            xm = dv;
-                                        }
-                                        if (xm > x) xm = x;
-                                        foundEdge = true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    px -= sigX;
-
-                    if (foundEdge) {
-                        x = xm;
-                    }
-
-                    if (sigX > 0) {
-                        if (px < oBoundX) {
-                            break;
-                        }
-                    } else {
-                        if (px > oBoundX) {
-                            break;
-                        }
-                    }
+                boolean noCol = lvl.noCollision(curr);
+                if (noCol) {
+                    Vec3 dm = Entity.collideBoundingBox(
+                            entity,
+                            new Vec3(-(x + pad), 0, 0),
+                            curr, lvl,
+                            Collections.emptyList()
+                    );
+                    cir.setReturnValue(new Vec3(
+                            ((x + pad) + dm.x) - pad,
+                            vec3.y,
+                            z
+                    ));
+                    return;
                 }
+
+                cir.setReturnValue(new Vec3(x, vec3.y, z));
+                return;
+            } else if (sigZ != 0) {
+                double pad = 0.05 * sigZ;
+                AABB curr = stepperBounds.move(0, 0, z + pad);
+
+                boolean noCol = lvl.noCollision(curr);
+                if (noCol) {
+                    Vec3 dm = Entity.collideBoundingBox(
+                            entity,
+                            new Vec3(0, 0, -(z + pad)),
+                            curr, lvl,
+                            Collections.emptyList()
+                    );
+                    cir.setReturnValue(new Vec3(
+                            x,
+                            vec3.y,
+                            ((z + pad) + dm.z) - pad
+                    ));
+                    return;
+                }
+
+                cir.setReturnValue(new Vec3(x, vec3.y, z));
+                return;
             }
 
             cir.setReturnValue(new Vec3(x, vec3.y, z));
