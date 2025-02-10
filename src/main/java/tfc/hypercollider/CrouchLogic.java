@@ -191,18 +191,34 @@ public class CrouchLogic {
                     if (Math.abs(x) < 1)
                         x -= sigX * 0.05;
                     else
-                        x -= sigX;
+                        x -= sigX * 0.5;
                     if (Math.abs(z) < 1)
                         z -= sigZ * 0.05;
                     else
-                        z -= sigZ;
+                        z -= sigZ * 0.5;
                     if (Math.abs(x) <= 0.05) x = 0;
                     if (Math.abs(z) <= 0.05) z = 0;
 
-                    if (x == 0 || z == 0)
+                    if (x == 0 && z == 0)
                         break;
                 }
             }
+
+            // TODO: perform a proper check
+            // basically, move the bounding box ahead of time
+            // check collide back on whatever axis is non-zero
+//            sigX = (int) Math.signum(x);
+//            sigZ = (int) Math.signum(z);
+//
+//            if (sigX != 0) {
+//                vec3 = checkX(entity, vec3, sigX, lvl, x, z, stepperBounds);
+//                x = vec3.x;
+//            }
+//
+//            if (sigZ != 0) {
+//                vec3 = checkZ(entity, vec3, sigZ, lvl, x, z, stepperBounds);
+//                z = vec3.z;
+//            }
 
             cir.setReturnValue(new Vec3(x, vec3.y, z));
         } else {
