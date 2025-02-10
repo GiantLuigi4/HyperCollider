@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "hypercollider",
+  "version": "${version}",
+  "name": "HyperCollider",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/hypercollider/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "tfc.hypercollider.Hypercollider"
+    ]
+  },
+  "mixins": [
+    "hypercollider.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}"
+  }
+}

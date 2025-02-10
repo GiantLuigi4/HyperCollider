@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "tfc.hypercollider.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "entity.FastCollision",
+    "entity.FastBlockChecking",
+    "entity.FastFluids",
+    "entity.QuickCrouch",
+
+    "achievement.DedupPredicates",
+    "achievement.PlayerPredicateCache",
+
+    "voxel.FastVoxel",
+
+    "level.FastNoCollisionCheck"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
