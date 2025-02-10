@@ -1,6 +1,5 @@
-package tfc.hypercollider;
+package tfc.hypercollider.util.game;
 
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
@@ -13,7 +12,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import tfc.hypercollider.sweepers.EdgeSweeper;
+import tfc.hypercollider.util.logic.ShapeChecker;
+import tfc.hypercollider.util.sweepers.EdgeSweeper;
 
 import java.util.Collections;
 

@@ -1,4 +1,4 @@
-package tfc.hypercollider.itf;
+package tfc.hypercollider.util.itf;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 

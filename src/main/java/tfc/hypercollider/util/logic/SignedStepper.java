@@ -1,4 +1,4 @@
-package tfc.hypercollider;
+package tfc.hypercollider.util.logic;
 
 public class SignedStepper {
     public static int step(int sign, int value) {

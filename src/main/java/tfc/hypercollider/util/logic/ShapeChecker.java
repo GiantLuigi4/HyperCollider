@@ -1,4 +1,4 @@
-package tfc.hypercollider;
+package tfc.hypercollider.util.logic;
 
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.*;

@@ -1,4 +1,4 @@
-package tfc.hypercollider.sweepers;
+package tfc.hypercollider.util.sweepers;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;

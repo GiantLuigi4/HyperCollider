@@ -12,6 +12,8 @@
     "achievement.DedupPredicates",
     "achievement.PlayerPredicateCache",
 
+    "voxel.CubeMixin",
+    "voxel.ArrayMixin",
     "voxel.FastVoxel",
 
     "level.FastNoCollisionCheck"
