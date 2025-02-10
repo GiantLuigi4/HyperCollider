@@ -59,6 +59,7 @@ public class CrouchLogic {
 
             CollisionContext context = CollisionContext.of(entity);
 
+            // TODO: I wonder if there's a better way I can do this?
             if (sigX != 0 && sigZ != 0) {
                 EdgeSweeper sweeper = new EdgeSweeper(
                         stepperBounds, entity.position().x, entity.position().y, entity.position().z
@@ -141,9 +142,6 @@ public class CrouchLogic {
                     if (x == 0 && z == 0)
                         break;
                 }
-            } else {
-                cir.setReturnValue(new Vec3(0, 0, 0));
-                if (true) return;
             }
 
             if (sigX != 0 && sigZ == 0) {
