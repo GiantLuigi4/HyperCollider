@@ -1,7 +1,6 @@
 package tfc.hypercollider;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Abilities;
@@ -13,8 +12,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import tfc.hypercollider.sweepers.EdgeSweeper;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class CrouchLogic {
@@ -22,16 +21,18 @@ public class CrouchLogic {
         if (!abilities.flying && vec3.y <= 0.0 && (moverType == MoverType.SELF || moverType == MoverType.PLAYER) && stayingOnGroundSurface && aboveGround) {
             double x = vec3.x;
             double z = vec3.z;
-//            z = 0;
-            x = 0;
 
             int sigX = (int) Math.signum(x);
             int sigZ = (int) Math.signum(z);
 
+            if (sigX == 0 && sigZ == 0) {
+                cir.setReturnValue(vec3);
+                return;
+            }
+
             Level lvl = entity.level();
 
             float sUp = entity.maxUpStep();
-            int stepRegion = (int) Math.ceil(sUp);
 
             AABB eBounds = entity.getBoundingBox();
 
@@ -53,8 +54,59 @@ public class CrouchLogic {
 
             CollisionContext context = CollisionContext.of(entity);
 
-            int minY = (int) Math.floor(stepperRegion.minY) - 1;
-            int maxY = (int) Math.ceil(stepperRegion.maxY) + 1;
+            if (sigX != 0 && sigZ != 0) {
+                EdgeSweeper sweeper = new EdgeSweeper(
+                        stepperBounds, entity.position().x, entity.position().y, entity.position().z
+                );
+
+                double padX = 0.05 * sigX;
+                double padZ = 0.05 * sigZ;
+                AABB curr = stepperBounds.move(x + padX, 0, z + padZ);
+                boolean noCol = lvl.noCollision(curr);
+                if (!noCol) {
+                    cir.setReturnValue(vec3);
+                    return;
+                }
+
+                while (true) {
+                    sigX = (int) Math.signum(x);
+                    sigZ = (int) Math.signum(z);
+                    sweeper.set(
+                            (int) (stepperBounds.minX + x),
+                            (int) (stepperBounds.minY),
+                            (int) (stepperBounds.minZ + z),
+                            sigX, sigZ
+                    );
+
+                    boolean noCollide = true;
+                    while (sweeper.hasNext()) {
+                        sweeper.next(mutable);
+
+                        BlockState state = lvl.getBlockState(mutable);
+                        VoxelShape shape = state.getCollisionShape(lvl, mutable, context);
+                        if (ShapeChecker.checkCollision(
+                                stepperRegion, shape,
+                                mutable.getX(), mutable.getY(), mutable.getZ(),
+                                stepperShape
+                        )) {
+                            noCollide = false;
+                            break;
+                        }
+                    }
+                    if (!noCollide) {
+                        // TODO: locate exact maximum offset with collision
+                        cir.setReturnValue(vec3);
+                        return;
+                    }
+
+                    x -= sigX;
+                    z -= sigZ;
+                    if (Math.abs(x) < 1) x = 0;
+                    if (Math.abs(z) < 1) z = 0;
+
+                    if (x == 0 && z == 0) break;
+                }
+            }
 
             if (sigX != 0 && sigZ == 0) {
                 double pad = 0.05 * sigX;
@@ -78,7 +130,7 @@ public class CrouchLogic {
 
                 cir.setReturnValue(new Vec3(x, vec3.y, z));
                 return;
-            } else if (sigZ != 0) {
+            } else if (sigZ != 0 && sigX == 0) {
                 double pad = 0.05 * sigZ;
                 AABB curr = stepperBounds.move(0, 0, z + pad);
 
