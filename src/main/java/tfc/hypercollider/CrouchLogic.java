@@ -22,6 +22,50 @@ public class CrouchLogic {
 //    public static final double PAD_SIZE = 0.0;
     public static final double PAD_SIZE = 0.00001;
 
+    protected static Vec3 checkX(Entity entity, Vec3 vec3, double sigX, Level lvl, double x, double z, AABB stepperBounds) {
+        double pad = PAD_SIZE * sigX;
+        AABB curr = stepperBounds.move(x + pad, 0, 0);
+
+        boolean noCol = lvl.noCollision(curr);
+        if (noCol) {
+            Vec3 dm = Entity.collideBoundingBox(
+                    entity,
+                    new Vec3(-(x + pad), 0, 0),
+                    curr, lvl,
+                    Collections.emptyList()
+            );
+            return new Vec3(
+                    ((x + pad) + dm.x) - pad,
+                    vec3.y,
+                    z
+            );
+        }
+
+        return new Vec3(x, vec3.y, z);
+    }
+
+    protected static Vec3 checkZ(Entity entity, Vec3 vec3, double sigZ, Level lvl, double x, double z, AABB stepperBounds) {
+        double pad = PAD_SIZE * sigZ;
+        AABB curr = stepperBounds.move(0, 0, z + pad);
+
+        boolean noCol = lvl.noCollision(curr);
+        if (noCol) {
+            Vec3 dm = Entity.collideBoundingBox(
+                    entity,
+                    new Vec3(0, 0, -(z + pad)),
+                    curr, lvl,
+                    Collections.emptyList()
+            );
+            return new Vec3(
+                    x,
+                    vec3.y,
+                    ((z + pad) + dm.z) - pad
+            );
+        }
+
+        return new Vec3(x, vec3.y, z);
+    }
+
     public static void handle(Abilities abilities, Entity entity, Vec3 vec3, MoverType moverType, CallbackInfoReturnable<Vec3> cir, boolean stayingOnGroundSurface, boolean aboveGround) {
         if (!abilities.flying && vec3.y <= 0.0 && (moverType == MoverType.SELF || moverType == MoverType.PLAYER) && stayingOnGroundSurface && aboveGround) {
             double x = vec3.x;
@@ -60,6 +104,8 @@ public class CrouchLogic {
             CollisionContext context = CollisionContext.of(entity);
 
             // TODO: I wonder if there's a better way I can do this?
+            // TODO: BUG: if too close to -z edge, +z motion gets canceled out when close to -x edge
+            // TODO: BUG: if too close to -z edge, -z motion gets canceled out when close to +x edge
             if (sigX != 0 && sigZ != 0) {
                 EdgeSweeper sweeper = new EdgeSweeper(
                         stepperBounds, entity.position().x, entity.position().y, entity.position().z
@@ -139,54 +185,16 @@ public class CrouchLogic {
                     if (Math.abs(x) <= 0.05) x = 0;
                     if (Math.abs(z) <= 0.05) z = 0;
 
-                    if (x == 0 && z == 0)
+                    if (x == 0 || z == 0)
                         break;
                 }
             }
 
             if (sigX != 0 && sigZ == 0) {
-                double pad = PAD_SIZE * sigX;
-                AABB curr = stepperBounds.move(x + pad, 0, 0);
-
-                boolean noCol = lvl.noCollision(curr);
-                if (noCol) {
-                    Vec3 dm = Entity.collideBoundingBox(
-                            entity,
-                            new Vec3(-(x + pad), 0, 0),
-                            curr, lvl,
-                            Collections.emptyList()
-                    );
-                    cir.setReturnValue(new Vec3(
-                            ((x + pad) + dm.x) - pad,
-                            vec3.y,
-                            z
-                    ));
-                    return;
-                }
-
-                cir.setReturnValue(new Vec3(x, vec3.y, z));
+                cir.setReturnValue(checkX(entity, vec3, sigX, lvl, x, z, stepperBounds));
                 return;
             } else if (sigZ != 0 && sigX == 0) {
-                double pad = PAD_SIZE * sigZ;
-                AABB curr = stepperBounds.move(0, 0, z + pad);
-
-                boolean noCol = lvl.noCollision(curr);
-                if (noCol) {
-                    Vec3 dm = Entity.collideBoundingBox(
-                            entity,
-                            new Vec3(0, 0, -(z + pad)),
-                            curr, lvl,
-                            Collections.emptyList()
-                    );
-                    cir.setReturnValue(new Vec3(
-                            x,
-                            vec3.y,
-                            ((z + pad) + dm.z) - pad
-                    ));
-                    return;
-                }
-
-                cir.setReturnValue(new Vec3(x, vec3.y, z));
+                cir.setReturnValue(checkZ(entity, vec3, sigZ, lvl, x, z, stepperBounds));
                 return;
             }
 
