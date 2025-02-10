@@ -94,14 +94,28 @@ public class CrouchLogic {
                     eBounds.minY,
                     eBounds.maxZ
             );
+
+            BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+
+            CollisionContext context = CollisionContext.of(entity);
+
+            if (sigX != 0) {
+                vec3 = checkX(entity, vec3, sigX, lvl, x, z, stepperBounds);
+                x = vec3.x;
+            }
+
+            if (sigZ != 0) {
+                vec3 = checkZ(entity, vec3, sigZ, lvl, x, z, stepperBounds);
+                z = vec3.z;
+            }
+
             AABB stepperRegion = stepperBounds.expandTowards(
                     x, 0, z
             );
             VoxelShape stepperShape = Shapes.create(stepperRegion);
 
-            BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-
-            CollisionContext context = CollisionContext.of(entity);
+            sigX = (int) Math.signum(x);
+            sigZ = (int) Math.signum(z);
 
             // TODO: I wonder if there's a better way I can do this?
             // TODO: BUG: if too close to -z edge, +z motion gets canceled out when close to -x edge
@@ -188,14 +202,6 @@ public class CrouchLogic {
                     if (x == 0 || z == 0)
                         break;
                 }
-            }
-
-            if (sigX != 0 && sigZ == 0) {
-                cir.setReturnValue(checkX(entity, vec3, sigX, lvl, x, z, stepperBounds));
-                return;
-            } else if (sigZ != 0 && sigX == 0) {
-                cir.setReturnValue(checkZ(entity, vec3, sigZ, lvl, x, z, stepperBounds));
-                return;
             }
 
             cir.setReturnValue(new Vec3(x, vec3.y, z));
