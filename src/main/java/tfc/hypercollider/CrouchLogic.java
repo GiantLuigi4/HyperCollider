@@ -1,5 +1,6 @@
 package tfc.hypercollider;
 
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
@@ -94,8 +95,28 @@ public class CrouchLogic {
                         }
                     }
                     if (!noCollide) {
-                        // TODO: locate exact maximum offset with collision
-                        cir.setReturnValue(vec3);
+
+                        double pad = 0.05 * sigX;
+                        curr = stepperBounds.move(x + pad, 0, 0);
+                        Vec3 dm = Entity.collideBoundingBox(
+                                entity,
+                                new Vec3(-(x + pad), 0, 0),
+                                curr, lvl,
+                                Collections.emptyList()
+                        );
+                        x = ((x + pad) + dm.x) - pad;
+
+                        pad = 0.05 * sigZ;
+                        curr = stepperBounds.move(0, 0, z + pad);
+                        dm = Entity.collideBoundingBox(
+                                entity,
+                                new Vec3(0, 0, -(z + pad)),
+                                curr, lvl,
+                                Collections.emptyList()
+                        );
+                        z = ((z + pad) + dm.z) - pad;
+
+                        cir.setReturnValue(new Vec3(x, vec3.y, z));
                         return;
                     }
 
@@ -104,7 +125,8 @@ public class CrouchLogic {
                     if (Math.abs(x) < 1) x = 0;
                     if (Math.abs(z) < 1) z = 0;
 
-                    if (x == 0 && z == 0) break;
+                    if (x == 0 || z == 0)
+                        break;
                 }
             }
 

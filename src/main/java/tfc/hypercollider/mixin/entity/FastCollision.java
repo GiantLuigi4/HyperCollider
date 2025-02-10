@@ -187,10 +187,11 @@ public abstract class FastCollision {
                 axis, aABB,
                 preCheck, x
         );
+        if (x == 0) return x;
 
         int zSign = (int) Math.signum(x);
-        int start = SignedStepper.getStartValue(zSign, aABB.minZ, aABB.maxZ, x) - COLLISION_PADDING;
-        int end = SignedStepper.getEndValue(zSign, aABB.minZ, aABB.maxZ, x) + COLLISION_PADDING;
+        int start = SignedStepper.getStartValue(zSign, aABB.minZ, aABB.maxZ, x, COLLISION_PADDING);
+        int end = SignedStepper.getEndValue(zSign, aABB.minZ, aABB.maxZ, x, COLLISION_PADDING);
         int xEnd = (int) Math.ceil(aABB.maxX) + COLLISION_PADDING;
         int yEnd = (int) Math.ceil(aABB.maxY) + COLLISION_PADDING;
         int xStart = (int) Math.floor(aABB.minX) - COLLISION_PADDING;
@@ -202,7 +203,7 @@ public abstract class FastCollision {
         int penn = 0;
 
         loop:
-        for (int i = start; SignedStepper.checkDone(zSign, i, end); i += 1) {
+        for (int i = start; SignedStepper.checkDone(zSign, i, start, end); i += SignedStepper.step(zSign, i)) {
             boolean dPen = false;
             for (int zi = xStart; zi < xEnd; zi++) {
                 ChunkAccess chunk = lvl.getChunk(
@@ -255,10 +256,11 @@ public abstract class FastCollision {
                 axis, aABB,
                 preCheck, x
         );
+        if (x == 0) return x;
 
         int xSign = (int) Math.signum(x);
-        int start = SignedStepper.getStartValue(xSign, aABB.minX, aABB.maxX, x) - COLLISION_PADDING;
-        int end = SignedStepper.getEndValue(xSign, aABB.minX, aABB.maxX, x) + COLLISION_PADDING;
+        int start = SignedStepper.getStartValue(xSign, aABB.minX, aABB.maxX, x, COLLISION_PADDING);
+        int end = SignedStepper.getEndValue(xSign, aABB.minX, aABB.maxX, x, COLLISION_PADDING);
         int zEnd = (int) Math.ceil(aABB.maxZ) + COLLISION_PADDING;
         int yEnd = (int) Math.ceil(aABB.maxY) + COLLISION_PADDING;
         int zStart = (int) Math.floor(aABB.minZ) - COLLISION_PADDING;
@@ -270,7 +272,7 @@ public abstract class FastCollision {
         int penn = 0;
 
         loop:
-        for (int i = start; SignedStepper.checkDone(xSign, i, end); i += 1) {
+        for (int i = start; SignedStepper.checkDone(xSign, i, start, end); i += SignedStepper.step(xSign, i)) {
             boolean dPen = false;
             for (int zi = zStart; zi < zEnd; zi++) {
                 ChunkAccess chunk = lvl.getChunk(
@@ -323,10 +325,11 @@ public abstract class FastCollision {
                 axis, aABB,
                 preCheck, x
         );
+        if (x == 0) return x;
 
-        int xSign = (int) Math.signum(x);
-        int start = SignedStepper.getStartValue(xSign, aABB.minY, aABB.maxY, x) - COLLISION_PADDING;
-        int end = SignedStepper.getEndValue(xSign, aABB.minY, aABB.maxY, x) + COLLISION_PADDING;
+        int ySign = (int) Math.signum(x);
+        int start = SignedStepper.getStartValue(ySign, aABB.minY, aABB.maxY, x, COLLISION_PADDING);
+        int end = SignedStepper.getEndValue(ySign, aABB.minY, aABB.maxY, x, COLLISION_PADDING);
         int zEnd = (int) Math.ceil(aABB.maxZ) + COLLISION_PADDING;
         int xEnd = (int) Math.ceil(aABB.maxX) + COLLISION_PADDING;
         int zStart = (int) Math.floor(aABB.minZ) - COLLISION_PADDING;
@@ -338,7 +341,7 @@ public abstract class FastCollision {
         int penn = 0;
 
         loop:
-        for (int i = start; SignedStepper.checkDone(xSign, i, end); i += 1) {
+        for (int i = start; SignedStepper.checkDone(ySign, i, start, end); i += SignedStepper.step(ySign, i)) {
             boolean dPen = false;
             for (int zi = zStart; zi < zEnd; zi++) {
                 for (int xi = xStart; xi < xEnd; xi++) {
@@ -362,6 +365,7 @@ public abstract class FastCollision {
                                     )
                             ), delta
                     );
+                    if (delta < odelt) continue;
                     if (!dPen && delta != odelt) {
                         penn += 1;
                         dPen = true;
