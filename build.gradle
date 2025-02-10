@@ -11,6 +11,8 @@ base {
 }
 
 loom {
+    accessWidenerPath.set(file("src/main/resources/hypercollider.accesswidener"))
+
     splitEnvironmentSourceSets()
 
     mods {
@@ -33,12 +35,23 @@ repositories {
         name = "cursemaven"
         url = "https://www.cursemaven.com"
     }
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
+    }
 }
 
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
+//    mappings loom.officialMojangMappings()
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
+        parchment("org.parchmentmc.data:parchment-1.20.2:2023.12.10@zip")
+        parchment("org.parchmentmc.data:parchment-1.20.3:2023.12.31@zip")
+        parchment("org.parchmentmc.data:parchment-1.20.4:2024.04.14@zip")
+    }
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -46,7 +59,7 @@ dependencies {
     modImplementation 'com.github.Virtuoel:KanosConfig:0.4.1'
 //    modImplementation "curse.maven:spark-361579:4738953"
     modImplementation "curse.maven:spark-361579:4587310"
-//    modImplementation "curse.maven:lithium-360438:6097158"
+    modImplementation "curse.maven:lithium-360438:6097158"
 }
 
 processResources {

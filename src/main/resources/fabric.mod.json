@@ -9,6 +9,7 @@
   "license": "All-Rights-Reserved",
   "icon": "assets/hypercollider/icon.png",
   "environment": "*",
+  "accessWidener": "hypercollider.accesswidener",
   "entrypoints": {
     "main": [
       "tfc.hypercollider.Hypercollider"

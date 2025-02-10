@@ -14,6 +14,8 @@
 
     "voxel.CubeMixin",
     "voxel.ArrayMixin",
+    "voxel.InlineAABBComputation",
+    "voxel.OptimToBlock",
 
     "level.FastNoCollisionCheck"
   ],
