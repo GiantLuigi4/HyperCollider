@@ -18,6 +18,10 @@ import tfc.hypercollider.sweepers.EdgeSweeper;
 import java.util.Collections;
 
 public class CrouchLogic {
+//    public static final double PAD_SIZE = 0.01;
+//    public static final double PAD_SIZE = 0.0;
+    public static final double PAD_SIZE = 0.00001;
+
     public static void handle(Abilities abilities, Entity entity, Vec3 vec3, MoverType moverType, CallbackInfoReturnable<Vec3> cir, boolean stayingOnGroundSurface, boolean aboveGround) {
         if (!abilities.flying && vec3.y <= 0.0 && (moverType == MoverType.SELF || moverType == MoverType.PLAYER) && stayingOnGroundSurface && aboveGround) {
             double x = vec3.x;
@@ -60,8 +64,8 @@ public class CrouchLogic {
                         stepperBounds, entity.position().x, entity.position().y, entity.position().z
                 );
 
-                double padX = 0.05 * sigX;
-                double padZ = 0.05 * sigZ;
+                double padX = 0.01 * sigX;
+                double padZ = 0.01 * sigZ;
                 AABB curr = stepperBounds.move(x + padX, 0, z + padZ);
                 boolean noCol = lvl.noCollision(curr);
                 if (!noCol) {
@@ -95,43 +99,55 @@ public class CrouchLogic {
                         }
                     }
                     if (!noCollide) {
-
-                        double pad = 0.05 * sigX;
+                        double pad = PAD_SIZE * sigX;
                         curr = stepperBounds.move(x + pad, 0, 0);
-                        Vec3 dm = Entity.collideBoundingBox(
-                                entity,
-                                new Vec3(-(x + pad), 0, 0),
-                                curr, lvl,
-                                Collections.emptyList()
-                        );
-                        x = ((x + pad) + dm.x) - pad;
+                        if (lvl.noCollision(curr)) {
+                            Vec3 dm = Entity.collideBoundingBox(
+                                    entity,
+                                    new Vec3(-(x + pad), 0, 0),
+                                    curr, lvl,
+                                    Collections.emptyList()
+                            );
+                            x = ((x + pad) + dm.x) - pad;
+                        }
 
-                        pad = 0.05 * sigZ;
+                        pad = PAD_SIZE * sigZ;
                         curr = stepperBounds.move(0, 0, z + pad);
-                        dm = Entity.collideBoundingBox(
-                                entity,
-                                new Vec3(0, 0, -(z + pad)),
-                                curr, lvl,
-                                Collections.emptyList()
-                        );
-                        z = ((z + pad) + dm.z) - pad;
+                        if (lvl.noCollision(curr)){
+                            Vec3 dm = Entity.collideBoundingBox(
+                                    entity,
+                                    new Vec3(0, 0, -(z + pad)),
+                                    curr, lvl,
+                                    Collections.emptyList()
+                            );
+                            z = ((z + pad) + dm.z) - pad;
+                        }
 
                         cir.setReturnValue(new Vec3(x, vec3.y, z));
                         return;
                     }
 
-                    x -= sigX;
-                    z -= sigZ;
-                    if (Math.abs(x) < 1) x = 0;
-                    if (Math.abs(z) < 1) z = 0;
+                    if (Math.abs(x) < 1)
+                        x -= sigX * 0.05;
+                    else
+                        x -= sigX;
+                    if (Math.abs(z) < 1)
+                        z -= sigZ * 0.05;
+                    else
+                        z -= sigZ;
+                    if (Math.abs(x) <= 0.05) x = 0;
+                    if (Math.abs(z) <= 0.05) z = 0;
 
-                    if (x == 0 || z == 0)
+                    if (x == 0 && z == 0)
                         break;
                 }
+            } else {
+                cir.setReturnValue(new Vec3(0, 0, 0));
+                if (true) return;
             }
 
             if (sigX != 0 && sigZ == 0) {
-                double pad = 0.05 * sigX;
+                double pad = PAD_SIZE * sigX;
                 AABB curr = stepperBounds.move(x + pad, 0, 0);
 
                 boolean noCol = lvl.noCollision(curr);
@@ -153,7 +169,7 @@ public class CrouchLogic {
                 cir.setReturnValue(new Vec3(x, vec3.y, z));
                 return;
             } else if (sigZ != 0 && sigX == 0) {
-                double pad = 0.05 * sigZ;
+                double pad = PAD_SIZE * sigZ;
                 AABB curr = stepperBounds.move(0, 0, z + pad);
 
                 boolean noCol = lvl.noCollision(curr);

@@ -25,9 +25,9 @@ public class XYSweeper {
 //        this.minX = minX;
 //        this.minY = minY;
 //        this.minZ = minZ;
-        bx = cx = minX + this.minX;
-        by = cy = minY + this.minY;
-        bz = cz = minZ + this.minZ;
+        bx = cx = minX + this.minX - 1;
+        by = cy = minY + this.minY - 1;
+        bz = cz = minZ + this.minZ - 1;
         return this;
     }
 
