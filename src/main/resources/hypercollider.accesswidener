@@ -4,3 +4,5 @@ accessible method net/minecraft/world/phys/shapes/VoxelShape <init> (Lnet/minecr
 extendable method net/minecraft/world/phys/shapes/VoxelShape <init> (Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;)V
 
 accessible field net/minecraft/world/phys/shapes/VoxelShape shape Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;
+
+extendable class net/minecraft/world/phys/shapes/CubeVoxelShape

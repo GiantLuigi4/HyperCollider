@@ -16,6 +16,7 @@
     "voxel.ArrayMixin",
     "voxel.InlineAABBComputation",
     "voxel.OptimToBlock",
+    "voxel.SpecializeCube",
 
     "math.FastCycle2",
     "math.FastCycle3",

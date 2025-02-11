@@ -90,7 +90,7 @@ public abstract class FastBlockChecking {
 
                         if (blockState.isAir()) {
                             try {
-                                // TODO: config
+                                blockState.entityInside(this.level(), mutableBlockPos, (Entity) (Object) this);
                                 this.onInsideBlock(blockState);
                             } catch (Throwable var12) {
                                 CrashReport crashReport = CrashReport.forThrowable(var12, "Colliding entity with block");

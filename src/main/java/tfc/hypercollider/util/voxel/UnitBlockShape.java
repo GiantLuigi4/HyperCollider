@@ -12,21 +12,21 @@ import tfc.hypercollider.util.logic.ColliderUtil;
 
 import java.util.List;
 
-public class BlockShape extends CubeVoxelShape {
+public class UnitBlockShape extends CubeVoxelShape {
     AABB box;
 
-    public BlockShape(DiscreteVoxelShape shape, AABB box) {
+    public UnitBlockShape(DiscreteVoxelShape shape, AABB box) {
         super(shape);
         this.box = box;
     }
 
-//    @Override
-//    protected DoubleList getCoords(Direction.Axis axis) {
-//        return DoubleList.of(
-//                box.min(axis),
-//                box.max(axis)
-//        );
-//    }
+    @Override
+    protected DoubleList getCoords(Direction.Axis axis) {
+        return DoubleList.of(
+                box.min(axis),
+                box.max(axis)
+        );
+    }
 
     @Override
     public List<AABB> toAabbs() {
@@ -40,7 +40,7 @@ public class BlockShape extends CubeVoxelShape {
 
     @Override
     public VoxelShape move(double xOffset, double yOffset, double zOffset) {
-        return new BlockShape(shape, box.move(xOffset, yOffset, zOffset));
+        return new UnitBlockShape(shape, box.move(xOffset, yOffset, zOffset));
     }
 
     @Override

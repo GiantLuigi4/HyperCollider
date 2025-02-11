@@ -22,17 +22,17 @@ public class CubeMixin {
         return ColliderUtil.swivelOffset(axisCycle, aABB, other, d);
     }
 
-    public VoxelShape optimize() {
-        return new BlockShape(
-                ((VoxelShape) (Object) this).shape,
-                ((VoxelShape) (Object) this).bounds()
-        );
-    }
+//    public VoxelShape optimize() {
+//        return new BlockShape(
+//                ((VoxelShape) (Object) this).shape,
+//                ((VoxelShape) (Object) this).bounds()
+//        );
+//    }
 
-    public VoxelShape move(double xOffset, double yOffset, double zOffset) {
-        return new BlockShape(
-                ((VoxelShape) (Object) this).shape,
-                ((VoxelShape) (Object) this).bounds().move(xOffset, yOffset, zOffset)
-        );
-    }
+//    public VoxelShape move(double xOffset, double yOffset, double zOffset) {
+//        return new BlockShape(
+//                ((VoxelShape) (Object) this).shape,
+//                ((VoxelShape) (Object) this).bounds().move(xOffset, yOffset, zOffset)
+//        );
+//    }
 }
