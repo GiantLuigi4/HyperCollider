@@ -1,4 +1,4 @@
-package tfc.hypercollider.mixin.voxel;
+package tfc.hypercollider.mixin.voxel.special;
 
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;

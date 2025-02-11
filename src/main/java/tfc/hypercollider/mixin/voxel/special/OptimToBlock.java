@@ -1,5 +1,6 @@
-package tfc.hypercollider.mixin.voxel;
+package tfc.hypercollider.mixin.voxel.special;
 
+import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -20,7 +21,10 @@ public class OptimToBlock {
         if (poptimabs.size() == 1) {
             cir.setReturnValue(new BlockShape(
                     poptim.shape,
-                    poptim.bounds()
+                    poptim.bounds(),
+                    poptim.getCoords(Direction.Axis.X),
+                    poptim.getCoords(Direction.Axis.Y),
+                    poptim.getCoords(Direction.Axis.Z)
             ));
         } else if (poptimabs.isEmpty()) {
             // singleton empty

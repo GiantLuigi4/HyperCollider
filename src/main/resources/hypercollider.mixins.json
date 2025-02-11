@@ -12,12 +12,11 @@
 
     "achievement.DedupPredicates",
     "achievement.PlayerPredicateCache",
-
-    "voxel.CubeMixin",
-    "voxel.ArrayMixin",
+    "voxel.fast.CubeMixin",
+    "voxel.fast.ArrayMixin",
     "voxel.InlineAABBComputation",
-    "voxel.OptimToBlock",
-    "voxel.SpecializeCube",
+    "voxel.special.OptimToBlock",
+    "voxel.special.SpecializeCube",
 
     "math.FastCycle2",
     "math.FastCycle3",

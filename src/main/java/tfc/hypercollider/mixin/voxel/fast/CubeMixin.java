@@ -1,4 +1,4 @@
-package tfc.hypercollider.mixin.voxel;
+package tfc.hypercollider.mixin.voxel.fast;
 
 import net.minecraft.core.AxisCycle;
 import net.minecraft.world.phys.AABB;

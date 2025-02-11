@@ -1,6 +1,7 @@
 package tfc.hypercollider.util.voxel;
 
 import it.unimi.dsi.fastutil.doubles.DoubleList;
+import me.jellysquid.mods.lithium.common.shapes.VoxelShapeCaster;
 import net.minecraft.Util;
 import net.minecraft.core.AxisCycle;
 import net.minecraft.core.BlockPos;
@@ -17,7 +18,7 @@ import tfc.hypercollider.util.logic.ColliderUtil;
 
 import java.util.List;
 
-public class EmptyShape extends VoxelShape {
+public class EmptyShape extends VoxelShape implements VoxelShapeCaster {
     public static EmptyShape create() {
         DiscreteVoxelShape discreteVoxelShape = new BitSetDiscreteVoxelShape(1, 1, 1);
         discreteVoxelShape.fill(0, 0, 0);
@@ -102,4 +103,11 @@ public class EmptyShape extends VoxelShape {
     public double collide(Direction.Axis movementAxis, AABB collisionBox, double desiredOffset) {
         return desiredOffset;
     }
+
+    @Override
+    public boolean intersects(AABB aabb, double v, double v1, double v2) {
+        return false;
+    }
+
+
 }

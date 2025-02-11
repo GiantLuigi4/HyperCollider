@@ -3,6 +3,13 @@ accessWidener	v1	named
 accessible method net/minecraft/world/phys/shapes/VoxelShape <init> (Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;)V
 extendable method net/minecraft/world/phys/shapes/VoxelShape <init> (Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;)V
 
+accessible method net/minecraft/world/phys/shapes/ArrayVoxelShape <init> (Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;[D[D[D)V
+extendable method net/minecraft/world/phys/shapes/ArrayVoxelShape <init> (Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;[D[D[D)V
+accessible method net/minecraft/world/phys/shapes/ArrayVoxelShape <init> (Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;Lit/unimi/dsi/fastutil/doubles/DoubleList;Lit/unimi/dsi/fastutil/doubles/DoubleList;Lit/unimi/dsi/fastutil/doubles/DoubleList;)V
+extendable method net/minecraft/world/phys/shapes/ArrayVoxelShape <init> (Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;Lit/unimi/dsi/fastutil/doubles/DoubleList;Lit/unimi/dsi/fastutil/doubles/DoubleList;Lit/unimi/dsi/fastutil/doubles/DoubleList;)V
+
 accessible field net/minecraft/world/phys/shapes/VoxelShape shape Lnet/minecraft/world/phys/shapes/DiscreteVoxelShape;
 
 extendable class net/minecraft/world/phys/shapes/CubeVoxelShape
+
+accessible method net/minecraft/world/phys/shapes/VoxelShape getCoords (Lnet/minecraft/core/Direction$Axis;)Lit/unimi/dsi/fastutil/doubles/DoubleList;
