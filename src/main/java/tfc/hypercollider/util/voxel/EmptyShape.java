@@ -29,7 +29,7 @@ public class EmptyShape extends VoxelShape {
     }
 
     @Override
-    protected DoubleList getCoords(Direction.Axis axis) {
+    public DoubleList getCoords(Direction.Axis axis) {
         return DoubleList.of(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
     }
 

@@ -21,7 +21,7 @@ public class UnitBlockShape extends CubeVoxelShape {
     }
 
     @Override
-    protected DoubleList getCoords(Direction.Axis axis) {
+    public DoubleList getCoords(Direction.Axis axis) {
         return DoubleList.of(
                 box.min(axis),
                 box.max(axis)

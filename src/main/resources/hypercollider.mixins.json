@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "tfc.hypercollider.mixin",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "tfc.hypercollider.MixinConnector",
   "mixins": [
     "entity.FastCollision",
     "entity.FastBlockChecking",

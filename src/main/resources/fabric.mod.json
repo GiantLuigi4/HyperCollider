@@ -4,17 +4,12 @@
   "version": "${version}",
   "name": "HyperCollider",
   "description": "",
-  "authors": [],
+  "authors": ["GiantLuigi4"],
   "contact": {},
-  "license": "All-Rights-Reserved",
+  "license": "MIT",
   "icon": "assets/hypercollider/icon.png",
   "environment": "*",
   "accessWidener": "hypercollider.accesswidener",
-  "entrypoints": {
-    "main": [
-      "tfc.hypercollider.Hypercollider"
-    ]
-  },
   "mixins": [
     "hypercollider.mixins.json"
   ],
