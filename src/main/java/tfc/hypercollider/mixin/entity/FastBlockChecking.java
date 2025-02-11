@@ -90,7 +90,7 @@ public abstract class FastBlockChecking {
 
                         if (blockState.isAir()) {
                             try {
-                                // TODO: criterion needs a fast path for players before I uncomment this
+                                // TODO: config
                                 this.onInsideBlock(blockState);
                             } catch (Throwable var12) {
                                 CrashReport crashReport = CrashReport.forThrowable(var12, "Colliding entity with block");

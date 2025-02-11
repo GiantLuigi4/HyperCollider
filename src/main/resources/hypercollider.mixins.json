@@ -17,6 +17,9 @@
     "voxel.InlineAABBComputation",
     "voxel.OptimToBlock",
 
+    "math.FastCycle2",
+    "math.FastCycle3",
+
     "level.FastNoCollisionCheck"
   ],
   "injectors": {
