@@ -18,7 +18,7 @@ import tfc.hypercollider.util.sweepers.EdgeSweeper;
 import java.util.Collections;
 
 public class CrouchLogic {
-//    public static final double PAD_SIZE = 0.01;
+    //    public static final double PAD_SIZE = 0.01;
 //    public static final double PAD_SIZE = 0.0;
     public static final double PAD_SIZE = 0.00001;
 
@@ -107,6 +107,17 @@ public class CrouchLogic {
             if (sigZ != 0) {
                 vec3 = checkZ(entity, vec3, sigZ, lvl, x, z, stepperBounds);
                 z = vec3.z;
+                if (sigX == 0) {
+                    cir.setReturnValue(new Vec3(
+                            x, vec3.y, z
+                    ));
+                    return;
+                }
+            } else {
+                cir.setReturnValue(new Vec3(
+                        x, vec3.y, z
+                ));
+                return;
             }
 
             AABB stepperRegion = stepperBounds.expandTowards(
@@ -127,7 +138,7 @@ public class CrouchLogic {
 
                 double padX = 0.01 * sigX;
                 double padZ = 0.01 * sigZ;
-                AABB curr = stepperBounds.move(x + padX, 0, z + padZ);
+                AABB curr = stepperBounds.move(x, 0, z);
                 boolean noCol = lvl.noCollision(curr);
                 if (!noCol) {
                     cir.setReturnValue(vec3);
@@ -174,7 +185,7 @@ public class CrouchLogic {
 
                         pad = PAD_SIZE * sigZ;
                         curr = stepperBounds.move(0, 0, z + pad);
-                        if (lvl.noCollision(curr)){
+                        if (lvl.noCollision(curr)) {
                             Vec3 dm = Entity.collideBoundingBox(
                                     entity,
                                     new Vec3(0, 0, -(z + pad)),

@@ -58,10 +58,11 @@ public abstract class FastCollision {
         boolean bl2 = vec3.y != vec32.y;
         boolean bl3 = vec3.z != vec32.z;
         boolean bl4 = this.onGround() || bl2 && vec3.y < 0.0;
-        if (this.maxUpStep() > 0.0F && bl4 && (bl || bl3)) {
-            Vec3 vec33 = collideBoundingBox((Entity) (Object) this, new Vec3(vec3.x, (double) this.maxUpStep(), vec3.z), aABB, this.level(), list);
-            Vec3 vec34 = collideBoundingBox((Entity) (Object) this, new Vec3(0.0, (double) this.maxUpStep(), 0.0), aABB.expandTowards(vec3.x, 0.0, vec3.z), this.level(), list);
-            if (vec34.y < (double) this.maxUpStep()) {
+        double stepUp = this.maxUpStep();
+        if (stepUp > 0.0F && bl4 && (bl || bl3)) {
+            Vec3 vec33 = collideBoundingBox((Entity) (Object) this, new Vec3(vec3.x, (double) stepUp, vec3.z), aABB, this.level(), list);
+            Vec3 vec34 = collideBoundingBox((Entity) (Object) this, new Vec3(0.0, (double) stepUp, 0.0), aABB.expandTowards(vec3.x, 0.0, vec3.z), this.level(), list);
+            if (vec34.y < (double) stepUp) {
                 Vec3 vec35 = collideBoundingBox((Entity) (Object) this, new Vec3(vec3.x, 0.0, vec3.z), aABB.move(vec34), this.level(), list).add(vec34);
                 if (vec35.horizontalDistanceSqr() > vec33.horizontalDistanceSqr()) {
                     vec33 = vec35;
