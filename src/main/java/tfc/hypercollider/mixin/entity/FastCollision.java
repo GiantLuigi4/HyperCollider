@@ -50,7 +50,7 @@ public abstract class FastCollision {
      * @reason
      */
     @Overwrite
-    private Vec3 collide(Vec3 vec3) {
+    public Vec3 collide(Vec3 vec3) {
         AABB aABB = this.getBoundingBox();
         List<VoxelShape> list = this.level().getEntityCollisions((Entity) (Object) this, aABB.expandTowards(vec3));
         Vec3 vec32 = vec3.lengthSqr() == 0.0 ? vec3 : collideBoundingBox((Entity) (Object) this, vec3, aABB, this.level(), list);
@@ -151,28 +151,41 @@ public abstract class FastCollision {
             return vanillaCollide(vec3, aABB, list);
         }
 
-        Level lvl = e.level();
-
         double x = vec3.x;
         double y = vec3.y;
         double z = vec3.z;
-        boolean xFirst = Math.abs(x) > Math.abs(z);
+
+        boolean noX = x == 0;
+        boolean noZ = z == 0;
+        boolean noXZ = noX && noZ;
+        boolean noY = y == 0;
+        if (noXZ && noY) return vec3;
+
+        Level lvl = e.level();
 
         CollisionContext ctx = CollisionContext.of(e);
 
-        y = doYCollision(aABB, y, lvl, ctx, list);
-        aABB = aABB.move(0.0, y, 0.0);
+        if (!noY) {
+            y = doYCollision(aABB, y, lvl, ctx, list);
+            aABB = aABB.move(0.0, y, 0.0);
+        }
+
+        if (noXZ) return new Vec3(x, y, z);
+
+        boolean xFirst = Math.abs(x) > Math.abs(z);
 
         if (xFirst) {
             x = doXCollision(aABB, x, lvl, ctx, list);
             aABB = aABB.move(x, 0.0, 0.0);
 
-            z = doZCollision(aABB, z, lvl, ctx, list);
+            if (!noZ)
+                z = doZCollision(aABB, z, lvl, ctx, list);
         } else {
             z = doZCollision(aABB, z, lvl, ctx, list);
             aABB = aABB.move(0.0, 0.0, z);
 
-            x = doXCollision(aABB, x, lvl, ctx, list);
+            if (!noX)
+                x = doXCollision(aABB, x, lvl, ctx, list);
         }
 
         return new Vec3(
