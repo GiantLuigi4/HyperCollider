@@ -1,4 +1,4 @@
-package tfc.hypercollider.mixin.achievement;
+package tfc.hypercollider.mixin.achievement.predicates;
 
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.server.level.ServerPlayer;
