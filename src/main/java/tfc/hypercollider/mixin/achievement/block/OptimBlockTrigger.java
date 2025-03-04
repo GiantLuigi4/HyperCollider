@@ -38,7 +38,6 @@ public abstract class OptimBlockTrigger extends SimpleCriterionTrigger<EnterBloc
 
         LootContext lootContext = null;
 
-        // TODO: should be using a Map<Block->List<TriggerInstance>>
         for (Listener<?> li : lis) {
             EnterBlockTrigger.TriggerInstance instance = (EnterBlockTrigger.TriggerInstance) li.getTriggerInstance();
             if (testTrigger.test(instance)
@@ -65,20 +64,21 @@ public abstract class OptimBlockTrigger extends SimpleCriterionTrigger<EnterBloc
         if (lis == null) {
             Set<CriterionTrigger.Listener<?>> set = (Set) ((CriterionAccessor) this).getPlayers().get(playerAdvancements);
             ((CacheList) playerAdvancements).setCache(set);
-            lis = ((CacheList) playerAdvancements).getCacheList();
+            ((CacheList) playerAdvancements).getCacheList();
         } else {
             Set<Listener<?>> slis = ((CacheList) playerAdvancements).getCache();
             if (slis.size() != lis.size()) {
-                lis = ((CacheList) playerAdvancements).updateList();
+                ((CacheList) playerAdvancements).updateList();
             }
         }
 
         LootContext lootContext = null;
 
         Map<Block, List<Listener<?>>> mp = ((CacheList) playerAdvancements).getMap();
+        if (mp.isEmpty()) return;
+
         List<Listener<?>> blkListeners = mp.get(state.getBlock());
         if (blkListeners == null) return;
-//        for (Listener<?> li : lis) {
         for (Listener<?> li : blkListeners) {
             EnterBlockTrigger.TriggerInstance instance = (EnterBlockTrigger.TriggerInstance) li.getTriggerInstance();
             if (instance.matches(state)
