@@ -54,6 +54,11 @@ public abstract class FastBlockChecking {
     @Shadow
     private int remainingFireTicks;
 
+    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockStatesIfLoaded(Lnet/minecraft/world/phys/AABB;)Ljava/util/stream/Stream;"))
+    public Stream doNotGet(Level instance, AABB aabb) {
+        return Stream.empty();
+    }
+
     @Redirect(method = "move", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;noneMatch(Ljava/util/function/Predicate;)Z"))
     public boolean doNotMatch(Stream instance, Predicate predicate) {
         return false;

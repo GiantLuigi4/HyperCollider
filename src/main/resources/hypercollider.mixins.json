@@ -15,6 +15,7 @@
     "achievement.block.OptimBlockTrigger",
     "achievement.access.CriterionAccessor",
     "achievement.access.AbstractCriterionAccessor",
+    "achievement.access.EnterBlockTriggerInstAccessor",
 
     "voxel.fast.CubeMixin",
     "voxel.fast.ArrayMixin",

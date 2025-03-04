@@ -4,6 +4,7 @@ import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +15,7 @@ import tfc.hypercollider.util.itf.CacheList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -73,8 +75,11 @@ public abstract class OptimBlockTrigger extends SimpleCriterionTrigger<EnterBloc
 
         LootContext lootContext = null;
 
-        // TODO: should be using a Map<Block->List<TriggerInstance>>
-        for (Listener<?> li : lis) {
+        Map<Block, List<Listener<?>>> mp = ((CacheList) playerAdvancements).getMap();
+        List<Listener<?>> blkListeners = mp.get(state.getBlock());
+        if (blkListeners == null) return;
+//        for (Listener<?> li : lis) {
+        for (Listener<?> li : blkListeners) {
             EnterBlockTrigger.TriggerInstance instance = (EnterBlockTrigger.TriggerInstance) li.getTriggerInstance();
             if (instance.matches(state)
                     && ((AbstractCriterionAccessor) instance).callGetPlayerPredicate()
