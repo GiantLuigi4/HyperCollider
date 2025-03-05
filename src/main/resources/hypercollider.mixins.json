@@ -24,7 +24,6 @@
     "voxel.special.OptimToBlock",
     "voxel.special.SpecializeCube",
     "voxel.special.SpecializeEmpty",
-    "voxel.cache.Array_CacheBoundList",
     "voxel.overlap.EmptyShapeMixin",
     "voxel.overlap.BlockShapeMixin",
     "voxel.overlap.OffsetBoundingShapeMixin",
@@ -32,6 +31,7 @@
     "voxel.lithium.casting.OverlapCaster",
     "voxel.overlap.CubeQuery",
     "voxel.join.FastJoinNotEmpty",
+    "voxel.cache.ArrayBoxList",
 
     "math.FastCycle2",
     "math.FastCycle3",

@@ -3,6 +3,7 @@ package tfc.hypercollider.util.logic;
 import net.minecraft.core.AxisCycle;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ColliderUtil {
     public static double swivelOffset(
@@ -95,5 +96,15 @@ public class ColliderUtil {
         }
 
         return offsetX;
+    }
+
+    public static double collide(
+            Direction.Axis axis, AABB aABB,
+            VoxelShape move, double delta
+    ) {
+        return move.collide(
+                axis, aABB,
+                delta
+        );
     }
 }

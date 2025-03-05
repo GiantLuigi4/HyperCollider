@@ -57,8 +57,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "curse.maven:pehkui-319596:4641062"
     modImplementation 'com.github.Virtuoel:KanosConfig:0.4.1'
-//    modImplementation "curse.maven:spark-361579:4738953"
-    modImplementation "curse.maven:spark-361579:4587310"
+    modImplementation "curse.maven:spark-361579:4738953"
+//    modImplementation "curse.maven:spark-361579:4587310"
     modCompileOnly "curse.maven:lithium-360438:6097158"
 }
 
