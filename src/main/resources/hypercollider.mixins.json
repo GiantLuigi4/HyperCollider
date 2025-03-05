@@ -9,6 +9,7 @@
     "entity.FastBlockChecking",
     "entity.FastFluids",
     "entity.QuickCrouch",
+
     "achievement.predicates.DedupPredicates",
     "achievement.predicates.PlayerPredicateCache",
     "achievement.block.AttachPlayerAttachments",
@@ -22,6 +23,15 @@
     "voxel.InlineAABBComputation",
     "voxel.special.OptimToBlock",
     "voxel.special.SpecializeCube",
+    "voxel.special.SpecializeEmpty",
+    "voxel.cache.Array_CacheBoundList",
+    "voxel.overlap.EmptyShapeMixin",
+    "voxel.overlap.BlockShapeMixin",
+    "voxel.overlap.OffsetBoundingShapeMixin",
+    "voxel.overlap.ArrayShapeMixin",
+    "voxel.lithium.casting.OverlapCaster",
+    "voxel.overlap.CubeQuery",
+    "voxel.join.FastJoinNotEmpty",
 
     "math.FastCycle2",
     "math.FastCycle3",

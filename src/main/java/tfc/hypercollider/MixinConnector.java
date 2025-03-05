@@ -9,9 +9,19 @@ import java.util.Set;
 
 public class MixinConnector implements IMixinConfigPlugin {
     private final Cfg cfg;
+    private final boolean lithiumInstalled;
 
     public MixinConnector() {
         cfg = new Cfg();
+        {
+            boolean present = false;
+            try {
+                Class.forName("me.jellysquid.mods.lithium.common.config.MixinConfig");
+                present = true;
+            } catch (Throwable err) {
+            }
+            lithiumInstalled = present;
+        }
     }
 
     @Override
@@ -25,6 +35,9 @@ public class MixinConnector implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (!lithiumInstalled && mixinClassName.contains("lithium")) {
+            return false; // automatically denied, considering the target isn't present
+        }
         return cfg.shouldApply(mixinClassName, targetClassName);
     }
 

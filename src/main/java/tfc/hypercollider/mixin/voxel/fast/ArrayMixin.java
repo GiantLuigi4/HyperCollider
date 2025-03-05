@@ -6,7 +6,6 @@ import net.minecraft.world.phys.shapes.ArrayVoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import tfc.hypercollider.util.logic.ColliderUtil;
-import tfc.hypercollider.util.voxel.BlockShape;
 
 @Mixin(ArrayVoxelShape.class)
 public class ArrayMixin {

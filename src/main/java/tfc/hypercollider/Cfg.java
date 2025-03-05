@@ -1,7 +1,5 @@
 package tfc.hypercollider;
 
-import me.jellysquid.mods.lithium.common.config.LithiumConfig;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

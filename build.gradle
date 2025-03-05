@@ -59,7 +59,7 @@ dependencies {
     modImplementation 'com.github.Virtuoel:KanosConfig:0.4.1'
 //    modImplementation "curse.maven:spark-361579:4738953"
     modImplementation "curse.maven:spark-361579:4587310"
-    modImplementation "curse.maven:lithium-360438:6097158"
+    modCompileOnly "curse.maven:lithium-360438:6097158"
 }
 
 processResources {

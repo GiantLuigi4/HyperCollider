@@ -13,3 +13,5 @@ accessible field net/minecraft/world/phys/shapes/VoxelShape shape Lnet/minecraft
 extendable class net/minecraft/world/phys/shapes/CubeVoxelShape
 
 accessible method net/minecraft/world/phys/shapes/VoxelShape getCoords (Lnet/minecraft/core/Direction$Axis;)Lit/unimi/dsi/fastutil/doubles/DoubleList;
+
+extendable class net/minecraft/world/phys/shapes/BitSetDiscreteVoxelShape

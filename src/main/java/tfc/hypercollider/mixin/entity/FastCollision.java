@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -354,14 +355,29 @@ public abstract class FastCollision {
 
         int penn = 0;
 
+        ChunkAccess prev = null;
+        long prevIdx = 0;
+        boolean pfirst = true;
         loop:
         for (int i = start; SignedStepper.checkDone(ySign, i, start, end); i += SignedStepper.step(ySign, i)) {
             boolean dPen = false;
             for (int zi = zStart; zi < zEnd; zi++) {
+                int cz = SectionPos.blockToSectionCoord(zi);
+                long czsl = ((long) cz) << 32L;
                 for (int xi = xStart; xi < xEnd; xi++) {
+                    int cx = SectionPos.blockToSectionCoord(xi);
+                    if (prevIdx != (czsl | cx) || pfirst) {
+                        prev = lvl.getChunk(
+                                cx, cz,
+                                ChunkStatus.FULL, false
+                        );
+                        pfirst = false;
+                        if (prev == null) continue;
+                    }
+
                     mutable.set(xi, i, zi);
 
-                    BlockState state = lvl.getBlockState(mutable);
+                    BlockState state = prev.getBlockState(mutable);
                     if (state.isAir()) continue;
 
                     VoxelShape sp = state.getCollisionShape(

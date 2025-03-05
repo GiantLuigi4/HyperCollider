@@ -1,6 +1,5 @@
 package tfc.hypercollider.mixin.voxel.special;
 
-import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -8,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import tfc.hypercollider.util.voxel.BlockShape;
+import tfc.hypercollider.util.voxel.BoundingShape;
 
 import java.util.List;
 
@@ -19,12 +18,9 @@ public class OptimToBlock {
         VoxelShape poptim = cir.getReturnValue();
         List<AABB> poptimabs = poptim.toAabbs();
         if (poptimabs.size() == 1) {
-            cir.setReturnValue(new BlockShape(
-                    poptim.shape,
-                    poptim.bounds(),
-                    poptim.getCoords(Direction.Axis.X),
-                    poptim.getCoords(Direction.Axis.Y),
-                    poptim.getCoords(Direction.Axis.Z)
+            cir.setReturnValue(new BoundingShape(
+                    Shapes.block().shape,
+                    poptim.bounds()
             ));
         } else if (poptimabs.isEmpty()) {
             // singleton empty

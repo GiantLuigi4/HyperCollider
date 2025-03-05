@@ -74,16 +74,19 @@ public abstract class FastBlockChecking {
         BlockPos blockPos = BlockPos.containing(aABB.minX + 1.0E-7, aABB.minY + 1.0E-7, aABB.minZ + 1.0E-7);
         BlockPos blockPos2 = BlockPos.containing(aABB.maxX - 1.0E-7, aABB.maxY - 1.0E-7, aABB.maxZ - 1.0E-7);
 
-        if (this.level().hasChunksAt(blockPos, blockPos2)) {
+        Level lvl = this.level();
+
+        if (lvl.hasChunksAt(blockPos, blockPos2)) {
             AABB deflate = this.getBoundingBox().deflate(1E-6);
             boolean touchingFire = false;
 
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
             for (int i = blockPos.getX(); i <= blockPos2.getX(); ++i) {
+                int cx = SectionPos.blockToSectionCoord(i);
                 for (int k = blockPos.getZ(); k <= blockPos2.getZ(); ++k) {
-                    ChunkAccess chunk = this.level().getChunk(
-                            SectionPos.blockToSectionCoord(i),
+                    ChunkAccess chunk = lvl.getChunk(
+                            cx,
                             SectionPos.blockToSectionCoord(k),
                             ChunkStatus.FULL, false
                     );
@@ -93,38 +96,27 @@ public abstract class FastBlockChecking {
                         mutableBlockPos.set(i, j, k);
                         BlockState blockState = chunk.getBlockState(mutableBlockPos);
 
-                        if (blockState.isAir()) {
-                            try {
-                                blockState.entityInside(this.level(), mutableBlockPos, (Entity) (Object) this);
-                                this.onInsideBlock(blockState);
-                            } catch (Throwable var12) {
-                                CrashReport crashReport = CrashReport.forThrowable(var12, "Colliding entity with block");
-                                CrashReportCategory crashReportCategory = crashReport.addCategory("Block being collided with");
-                                CrashReportCategory.populateBlockDetails(crashReportCategory, this.level(), mutableBlockPos, blockState);
-                                throw new ReportedException(crashReport);
-                            }
-                            continue;
-                        }
-
-                        if (!touchingFire) { // only need one match
-                            if (blockState.is(BlockTags.FIRE) || blockState.is(Blocks.LAVA)) {
-                                // match vanilla logic
-                                if (deflate.intersects(
-                                        mutableBlockPos.getX(), mutableBlockPos.getY(), mutableBlockPos.getZ(),
-                                        mutableBlockPos.getX() + 1, mutableBlockPos.getY() + 1, mutableBlockPos.getZ() + 1
-                                )) {
-                                    touchingFire = true;
+                        if (!blockState.isAir()) {
+                            if (!touchingFire) { // only need one match
+                                if (blockState.is(BlockTags.FIRE) || blockState.is(Blocks.LAVA)) {
+                                    // match vanilla logic
+                                    if (deflate.intersects(
+                                            i, j, k,
+                                            i + 1, j + 1, k + 1
+                                    )) {
+                                        touchingFire = true;
+                                    }
                                 }
                             }
                         }
 
                         try {
-                            blockState.entityInside(this.level(), mutableBlockPos, (Entity) (Object) this);
+                            blockState.entityInside(lvl, mutableBlockPos, (Entity) (Object) this);
                             this.onInsideBlock(blockState);
                         } catch (Throwable var12) {
                             CrashReport crashReport = CrashReport.forThrowable(var12, "Colliding entity with block");
                             CrashReportCategory crashReportCategory = crashReport.addCategory("Block being collided with");
-                            CrashReportCategory.populateBlockDetails(crashReportCategory, this.level(), mutableBlockPos, blockState);
+                            CrashReportCategory.populateBlockDetails(crashReportCategory, lvl, mutableBlockPos, blockState);
                             throw new ReportedException(crashReport);
                         }
                     }

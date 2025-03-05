@@ -1,7 +1,6 @@
 package tfc.hypercollider.util.voxel;
 
 import it.unimi.dsi.fastutil.doubles.DoubleList;
-import me.jellysquid.mods.lithium.common.shapes.VoxelShapeCaster;
 import net.minecraft.Util;
 import net.minecraft.core.AxisCycle;
 import net.minecraft.core.BlockPos;
@@ -15,14 +14,16 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import tfc.hypercollider.util.logic.ColliderUtil;
+import tfc.hypercollider.util.voxel.discrete.EmptyDiscreteShape;
 
 import java.util.List;
 
-public class EmptyShape extends VoxelShape implements VoxelShapeCaster {
+public class EmptyShape extends VoxelShape {
     public static EmptyShape create() {
-        DiscreteVoxelShape discreteVoxelShape = new BitSetDiscreteVoxelShape(1, 1, 1);
-        discreteVoxelShape.fill(0, 0, 0);
-        return new EmptyShape(discreteVoxelShape);
+//        DiscreteVoxelShape discreteVoxelShape = new BitSetDiscreteVoxelShape(1, 1, 1);
+//        discreteVoxelShape.fill(0, 0, 0);
+//        return new EmptyShape(discreteVoxelShape);
+        return new EmptyShape(EmptyDiscreteShape.INSTANCE);
     }
 
     public EmptyShape(DiscreteVoxelShape shape) {
@@ -90,13 +91,14 @@ public class EmptyShape extends VoxelShape implements VoxelShapeCaster {
     @Nullable
     @Override
     public BlockHitResult clip(Vec3 startVec, Vec3 endVec, BlockPos pos) {
-        return BlockHitResult.miss(
-                startVec, Direction.getNearest(
-                        endVec.x - startVec.x,
-                        endVec.y - startVec.y,
-                        endVec.z - startVec.z
-                ), pos
-        );
+//        return BlockHitResult.miss(
+//                startVec, Direction.getNearest(
+//                        endVec.x - startVec.x,
+//                        endVec.y - startVec.y,
+//                        endVec.z - startVec.z
+//                ), pos
+//        );
+        return null;
     }
 
     @Override
@@ -105,9 +107,12 @@ public class EmptyShape extends VoxelShape implements VoxelShapeCaster {
     }
 
     @Override
-    public boolean intersects(AABB aabb, double v, double v1, double v2) {
-        return false;
+    protected double get(Direction.Axis axis, int index) {
+        return 0;
     }
 
-
+    @Override
+    protected int findIndex(Direction.Axis axis, double position) {
+        return 0;
+    }
 }
