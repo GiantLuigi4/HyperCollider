@@ -2,10 +2,7 @@ package tfc.hypercollider.mixin.voxel.cache;
 
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.ArrayVoxelShape;
-import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
-import net.minecraft.world.phys.shapes.OffsetDoubleList;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,8 +40,8 @@ public abstract class ArrayBoxList extends VoxelShape implements BounderCachedSh
         VoxelShape res = new ArrayVoxelShape(
                 shape,
                 new OffsetDoubleList(xs, xOffset),
-                new OffsetDoubleList(ys, xOffset),
-                new OffsetDoubleList(zs, xOffset)
+                new OffsetDoubleList(ys, yOffset),
+                new OffsetDoubleList(zs, zOffset)
         );
         if (res instanceof BounderCachedShape bounder) {
             List<AABB> in = toAabbs();
