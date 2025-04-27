@@ -18,11 +18,17 @@ public class AttachPlayerAttachments implements CacheList {
     @Unique
     private List<CriterionTrigger.Listener<?>> liList;
     @Unique
-    private Map<Block, List<CriterionTrigger.Listener<?>>> listeners = new HashMap<>();
+    private final Map<Block, List<CriterionTrigger.Listener<?>>> listeners = new HashMap<>();
 
     @Override
     public void setCache(Set<CriterionTrigger.Listener<?>> li) {
         this.li = li;
+        if (li == null) {
+            this.li = new HashSet<>();
+            liList = new ArrayList<>();
+            listeners.clear();
+            return;
+        }
         updateList();
     }
 

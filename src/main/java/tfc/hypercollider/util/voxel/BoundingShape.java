@@ -122,7 +122,11 @@ public class BoundingShape extends CubeVoxelShape implements CubeShapeQuery {
 
     @Override
     protected int findIndex(Direction.Axis axis, double position) {
-        return Math.min(Math.max((int) position, -1), 1);
+        double middle;
+        if (position > (middle = max(axis))) return -1;
+        if (position < (middle += min(axis))) return -1;
+        if (position > middle * 0.5) return 1;
+        return 0;
     }
 
     @Override
